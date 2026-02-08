@@ -41,49 +41,43 @@ const SignUp = ({ setOpenAuth }) => {
     return true;
   };
 
-  const handleSignUp = async () => {
-    setLoading(true);
-    setButtonDisabled(true);
+const handleSignUp = async () => {
+  setLoading(true);
+  setButtonDisabled(true);
 
-    if (validateInputs()) {
-      await UserSignUp({ name, email, password })
-        .then((res) => {
-          dispatch(loginSuccess(res.data));
-          dispatch(
-            openSnackbar({
-              message: "Sign Up Successful",
-              severity: "success",
-            })
-          );
-          setLoading(false);
-          setButtonDisabled(false);
-          setOpenAuth(false);
-        })
-        .catch((err) => {
-          setButtonDisabled(false);
-          if (err.response) {
-            setLoading(false);
-            setButtonDisabled(false);
-            alert(err.response.data.message);
-            dispatch(
-              openSnackbar({
-                message: err.response.data.message,
-                severity: "error",
-              })
-            );
-          } else {
-            setLoading(false);
-            setButtonDisabled(false);
-            dispatch(
-              openSnackbar({
-                message: err.message,
-                severity: "error",
-              })
-            );
-          }
-        });
-    }
-  };
+  if (validateInputs()) {
+    await UserSignUp({ name, email, password })
+      .then((res) => {
+
+        localStorage.setItem("krist-app-token", res.data.token);
+
+        dispatch(loginSuccess(res.data));
+
+        dispatch(
+          openSnackbar({
+            message: "Sign Up Successful",
+            severity: "success",
+          })
+        );
+
+        setLoading(false);
+        setButtonDisabled(false);
+        setOpenAuth(false);
+      })
+      .catch((err) => {
+        setButtonDisabled(false);
+        setLoading(false);
+
+        dispatch(
+          openSnackbar({
+            message: err.response?.data?.message || err.message,
+            severity: "error",
+          })
+        );
+      });
+  }
+};
+
   return (
     <Container>
       <div>

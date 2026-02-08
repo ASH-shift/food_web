@@ -52,35 +52,43 @@ const SignIn = ({ setOpenAuth }) => {
     return true;
   };
 
-  const handelSignIn = async () => {
-    setLoading(true);
-    setButtonDisabled(true);
-    if (validateInputs()) {
-      await UserSignIn({ email, password })
-        .then((res) => {
-          dispatch(loginSuccess(res.data));
-          dispatch(
-            openSnackbar({
-              message: "Login Successful",
-              severity: "success",
-            })
-          );
-          setLoading(false);
-          setButtonDisabled(false);
-          setOpenAuth(false);
-        })
-        .catch((err) => {
-          setLoading(false);
-          setButtonDisabled(false);
-          dispatch(
-            openSnackbar({
-              message: err.message,
-              severity: "error",
-            })
-          );
-        });
-    }
-  };
+const handelSignIn = async () => {
+  setLoading(true);
+  setButtonDisabled(true);
+
+  if (validateInputs()) {
+    await UserSignIn({ email, password })
+      .then((res) => {
+
+        localStorage.setItem("krist-app-token", res.data.token);
+
+        dispatch(loginSuccess(res.data));
+
+        dispatch(
+          openSnackbar({
+            message: "Login Successful",
+            severity: "success",
+          })
+        );
+
+        setLoading(false);
+        setButtonDisabled(false);
+        setOpenAuth(false);
+      })
+      .catch((err) => {
+        setLoading(false);
+        setButtonDisabled(false);
+
+        dispatch(
+          openSnackbar({
+            message: err.message,
+            severity: "error",
+          })
+        );
+      });
+  }
+};
+
 
   return (
     <Container>

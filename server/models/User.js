@@ -20,11 +20,13 @@ const UserSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
-    favourites: {
-      type: [mongoose.Schema.Types.ObjectId],
-      ref: "Food",
-      default: [],
-    },
+    favourites: [
+  {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Food"
+  }
+],
+
     orders: {
       type: [mongoose.Schema.Types.ObjectId],
       ref: "Orders",
