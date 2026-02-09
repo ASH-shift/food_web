@@ -112,3 +112,12 @@ export const getFoodById = async (req, res, next) => {
     next(err);
   }
 };
+export const deleteFood = async (req, res, next) => {
+  try {
+    await Food.findByIdAndDelete(req.params.id);
+    res.status(200).json("Food deleted successfully");
+  } catch (err) {
+    next(err);
+  }
+};
+

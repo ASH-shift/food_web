@@ -26,6 +26,12 @@ const UserSchema = new mongoose.Schema(
     ref: "Food"
   }
 ],
+role: {
+  type: String,
+  enum: ["user", "admin"],
+  default: "user",
+},
+
 
     orders: {
       type: [mongoose.Schema.Types.ObjectId],

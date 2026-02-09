@@ -10,6 +10,10 @@ import Cart from "./pages/Cart";
 import FoodDetails from "./pages/FoodDetails";
 import FoodListing from "./pages/FoodListing";
 import { useSelector } from "react-redux";
+import Admin from "./pages/Admin";
+import { Navigate } from "react-router-dom";
+
+
 
 const Container = styled.div``;
 
@@ -17,6 +21,7 @@ function App() {
   const { currentUser } = useSelector((state) => state.user);
   const { open, message, severity } = useSelector((state) => state.snackbar);
   const [openAuth, setOpenAuth] = useState(false);
+  
   return (
     <ThemeProvider theme={lightTheme}>
       <BrowserRouter>
@@ -32,6 +37,9 @@ function App() {
             <Route path="/cart" exact element={<Cart />} />
             <Route path="/dishes/:id" exact element={<FoodDetails />} />
             <Route path="/dishes" exact element={<FoodListing />} />
+          <Route path="/admin" element={currentUser?.role === "admin" ? ( <Admin />) : (<Navigate to="/" />)}/>
+
+
           </Routes>
           {openAuth && (
             <Authentication setOpenAuth={setOpenAuth} openAuth={openAuth} />

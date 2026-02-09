@@ -57,35 +57,42 @@ const handelSignIn = async () => {
   setButtonDisabled(true);
 
   if (validateInputs()) {
-    await UserSignIn({ email, password })
-      .then((res) => {
+    try {
+      const res = await UserSignIn({ email, password });
 
-        localStorage.setItem("krist-app-token", res.data.token);
+      // ⭐ Save token
+      localStorage.setItem("krist-app-token", res.data.token);
 
-        dispatch(loginSuccess(res.data));
+      // ⭐ Save user in redux
+      dispatch(loginSuccess(res.data));
 
-        dispatch(
-          openSnackbar({
-            message: "Login Successful",
-            severity: "success",
-          })
-        );
+      dispatch(
+        openSnackbar({
+          message: "Login Successful",
+          severity: "success",
+        })
+      );
 
-        setLoading(false);
-        setButtonDisabled(false);
-        setOpenAuth(false);
-      })
-      .catch((err) => {
-        setLoading(false);
-        setButtonDisabled(false);
+      setLoading(false);
+      setButtonDisabled(false);
+      setOpenAuth(false);
 
-        dispatch(
-          openSnackbar({
-            message: err.message,
-            severity: "error",
-          })
-        );
-      });
+      // ⭐ Role Based Redirect
+      if (res.data.user.role === "admin") {
+        window.location.href = "/admin";
+      }
+
+    } catch (err) {
+      setLoading(false);
+      setButtonDisabled(false);
+
+      dispatch(
+        openSnackbar({
+          message: err.response?.data?.message || "Login Failed",
+          severity: "error",
+        })
+      );
+    }
   }
 };
 
