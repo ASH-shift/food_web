@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL:"https://food-web-88qt.onrender.com/api",
-,
+  baseURL: process.env.REACT_APP_API_URL,
+
 });
 
 //auth
